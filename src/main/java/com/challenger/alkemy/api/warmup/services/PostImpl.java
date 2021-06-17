@@ -85,7 +85,6 @@ public class PostImpl implements PostService {
 	    TypedQuery<Post> typedQuery = entityManager.createQuery(criteriaQuery);
 	    List<Post> postList = typedQuery.getResultList();
 	    
-	 // Filter by movie ID
 	    if(categoryId!=null) {
 	    	List<Post> listFilterByCategory = new ArrayList<>();
 	    	

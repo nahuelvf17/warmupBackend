@@ -1,4 +1,4 @@
-package com.challenger.alkemy.api.warmup.config;
+package com.challenger.alkemy.api.warmup.security.commons;
 
 import org.springframework.security.core.Authentication;
 
