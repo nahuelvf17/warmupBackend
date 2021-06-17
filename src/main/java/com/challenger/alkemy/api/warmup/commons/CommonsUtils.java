@@ -15,9 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 
+import com.challenger.alkemy.api.warmup.config.IAuthenticationFacade;
 import com.challenger.alkemy.api.warmup.models.entity.Categoria;
 import com.challenger.alkemy.api.warmup.models.entity.Usuario;
-import com.challenger.alkemy.api.warmup.security.commons.IAuthenticationFacade;
 import com.challenger.alkemy.api.warmup.services.CategoriaService;
 import com.challenger.alkemy.api.warmup.services.UsuarioService;
 

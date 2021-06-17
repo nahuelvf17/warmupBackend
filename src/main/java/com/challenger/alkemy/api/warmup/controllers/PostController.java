@@ -33,7 +33,7 @@ import com.challenger.alkemy.api.warmup.services.PostService;
 public class PostController {
 	
 	@Autowired
-	private CommonsUtils commonsUtilService;
+	private CommonsUtils commonsUtil;
 	
 	@Autowired
 	private PostService postService;
@@ -42,16 +42,16 @@ public class PostController {
 	public ResponseEntity<?> crear(@Valid PostDto postDto, BindingResult result) {
 				
 		if(result.hasErrors()) {
-			return commonsUtilService.validar(result);
+			return commonsUtil.validar(result);
 		}
 
 		Categoria categoriaDb;
 		Usuario usuarioDb;
 		
 		try {
-			categoriaDb= commonsUtilService.validarCategoria(Long.valueOf(postDto.getCategoriaId()));
-			usuarioDb= commonsUtilService.validarUsuario();
-			commonsUtilService.validarUrl(postDto.getImagen());
+			categoriaDb= commonsUtil.validarCategoria(Long.valueOf(postDto.getCategoriaId()));
+			usuarioDb= commonsUtil.validarUsuario();
+			commonsUtil.validarUrl(postDto.getImagen());
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
@@ -71,7 +71,7 @@ public class PostController {
 	public ResponseEntity<?> modificar(@Valid PostDto postDto, BindingResult result, @PathVariable Long id) {
 
 		if(result.hasErrors()) {
-			return commonsUtilService.validar(result);
+			return commonsUtil.validar(result);
 		}
 
 		Optional<Post> postDb = postService.findById(id);
@@ -83,9 +83,9 @@ public class PostController {
 		Usuario usuarioDb;
 		
 		try {
-			categoriaDb= commonsUtilService.validarCategoria(Long.valueOf(postDto.getCategoriaId()));
-			usuarioDb= commonsUtilService.validarUsuario();
-			commonsUtilService.validarUrl(postDto.getImagen());
+			categoriaDb= commonsUtil.validarCategoria(Long.valueOf(postDto.getCategoriaId()));
+			usuarioDb= commonsUtil.validarUsuario();
+			commonsUtil.validarUrl(postDto.getImagen());
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
