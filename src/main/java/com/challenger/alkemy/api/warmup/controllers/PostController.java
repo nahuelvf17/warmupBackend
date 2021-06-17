@@ -7,8 +7,6 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +36,7 @@ public class PostController {
 	private CommonsUtils commonsUtilService;
 	
 	@Autowired
-	private PostService postService;	
+	private PostService postService;
 	
 	@PostMapping("/posts")
 	public ResponseEntity<?> crear(@Valid PostDto postDto, BindingResult result) {
@@ -52,12 +50,11 @@ public class PostController {
 		
 		try {
 			categoriaDb= commonsUtilService.validarCategoria(Long.valueOf(postDto.getCategoriaId()));
-			usuarioDb= commonsUtilService.validarUsuario(postDto.getUsuario());
+			usuarioDb= commonsUtilService.validarUsuario();
 			commonsUtilService.validarUrl(postDto.getImagen());
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
-		
 		
 		Post postEntity = new Post();
 		
@@ -87,7 +84,7 @@ public class PostController {
 		
 		try {
 			categoriaDb= commonsUtilService.validarCategoria(Long.valueOf(postDto.getCategoriaId()));
-			usuarioDb= commonsUtilService.validarUsuario(postDto.getUsuario());
+			usuarioDb= commonsUtilService.validarUsuario();
 			commonsUtilService.validarUrl(postDto.getImagen());
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());

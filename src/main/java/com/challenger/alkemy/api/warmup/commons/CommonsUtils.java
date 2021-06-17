@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
 
+import com.challenger.alkemy.api.warmup.config.IAuthenticationFacade;
 import com.challenger.alkemy.api.warmup.models.entity.Categoria;
 import com.challenger.alkemy.api.warmup.models.entity.Usuario;
 import com.challenger.alkemy.api.warmup.services.CategoriaService;
@@ -28,6 +29,9 @@ public class CommonsUtils {
 	
 	@Autowired
 	private CategoriaService categoriaService;
+	
+	@Autowired
+	private IAuthenticationFacade authenticationFacade;
 	
 	public ResponseEntity<?> validar(BindingResult result){
 		Map<String, Object> errores = new HashMap<>();
@@ -83,14 +87,14 @@ public class CommonsUtils {
 	}
 	
 	
-	public Usuario validarUsuario(String usuario) throws Exception {
-		Optional<Usuario> usuarioDb =  usuarioService.findUsuarioByEmail(usuario);
-
-		if(!usuarioDb.isPresent()) {
-	    	throw new Exception(String.format("El usuario con ID (%s) no existe", usuario));
+	public Usuario validarUsuario() throws Exception {
+		Optional<Usuario> loggedUser = usuarioService.findUsuarioByEmail(authenticationFacade.getAuthentication().getName());
+		
+		if(!loggedUser.isPresent()) {
+	    	throw new Exception("El usuario no esta logeado");
 		}
 		
-		return usuarioDb.get();
+		return loggedUser.get();
 	}
 
 	

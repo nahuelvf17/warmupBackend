@@ -5,9 +5,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,14 +28,11 @@ import com.challenger.alkemy.api.warmup.security.dto.LoginUsuario;
 import com.challenger.alkemy.api.warmup.security.jwt.JwtProvider;
 import com.challenger.alkemy.api.warmup.services.UsuarioService;
 
-
 @RestController
 @RequestMapping("/auth")
 @CrossOrigin
 public class AuthController {
 
-	private final static Logger logger = LoggerFactory.getLogger(AuthController.class);
-	
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
@@ -50,57 +44,54 @@ public class AuthController {
 
 	@Autowired
 	JwtProvider jwtProvider;
-	
 
 	@PostMapping("/sign-up")
 	public ResponseEntity<?> registerUser(@Valid @RequestBody UsuarioDto usuarioDto, BindingResult result) {
-		
-		if(result.hasErrors()) {
+
+		if (result.hasErrors()) {
 			return validar(result);
 		}
-		
+
 		usuarioDto.setPassword(passwordEncoder.encode(usuarioDto.getPassword()));
-		
+
 		Usuario usuarioEntity = new Usuario();
 		BeanUtils.copyProperties(usuarioDto, usuarioEntity);
-		
+
 		try {
 			usuarioService.save(usuarioEntity);
-		}catch(Exception e) {
+		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
 		}
-		
+
 		return ResponseEntity.status(HttpStatus.CREATED).build();
 
 	}
-	
+
 	@PostMapping("/login")
-    public ResponseEntity<?> login( @RequestBody LoginUsuario loginData){
+	public ResponseEntity<?> login(@RequestBody LoginUsuario loginData) {
 
 		final Optional<Usuario> usuarioLogin = usuarioService.findUsuarioByEmail(loginData.getEmail());
-		
-		if(!usuarioLogin.isPresent()) {
+
+		if (!usuarioLogin.isPresent()) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El usuario no existe, debe registrarse");
 
 		}
-		
-		Authentication authentication =
-                authenticationManager.authenticate(
-                        new UsernamePasswordAuthenticationToken(loginData.getEmail(),
-                                loginData.getPassword()));
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = jwtProvider.generateToken(usuarioLogin.get());
-        JwtDto jwtDto = new JwtDto(jwt);
 
-        return new ResponseEntity<>(jwtDto, HttpStatus.OK);
+		Authentication authentication = authenticationManager
+				.authenticate(new UsernamePasswordAuthenticationToken(loginData.getEmail(), loginData.getPassword()));
+		SecurityContextHolder.getContext().setAuthentication(authentication);
+		String jwt = jwtProvider.generateToken(usuarioLogin.get());
+		JwtDto jwtDto = new JwtDto(jwt);
+
+		return new ResponseEntity<>(jwtDto, HttpStatus.OK);
 	}
-	
-	public ResponseEntity<?> validar(BindingResult result){
+
+	public ResponseEntity<?> validar(BindingResult result) {
 		Map<String, Object> errores = new HashMap<>();
-		result.getFieldErrors().forEach(err->{
-			errores.put(err.getField(), "El campo " + err.getField() +  " " + err.getDefaultMessage());
+		result.getFieldErrors().forEach(err -> {
+			errores.put(err.getField(), "El campo " + err.getField() + " " + err.getDefaultMessage());
 		});
-		
+
 		return ResponseEntity.badRequest().body(errores);
 	}
 }

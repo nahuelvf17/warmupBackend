@@ -2,12 +2,7 @@ package com.challenger.alkemy.api.warmup.models.dto;
 
 
 import java.io.Serializable;
-
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
-import org.springframework.web.multipart.MultipartFile;
-
 
 public class PostDto implements Serializable {
 	/**
@@ -24,9 +19,6 @@ public class PostDto implements Serializable {
 	private String contenido;
 	
 	private int categoriaId;
-
-	@NotEmpty
-	private String usuario;
 
 	private String imagen;
 	
@@ -60,14 +52,6 @@ public class PostDto implements Serializable {
 
 	public void setCategoriaId(int categoriaId) {
 		this.categoriaId = categoriaId;
-	}
-
-	public String getUsuario() {
-		return usuario;
-	}
-
-	public void setUsuario(String usuario) {
-		this.usuario = usuario;
 	}
 
 	public String getImagen() {

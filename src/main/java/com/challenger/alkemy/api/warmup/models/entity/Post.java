@@ -45,7 +45,7 @@ public class Post {
 	
 	
 	@Column(name="fecha_creacion")
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date fechaCreacion;
 
 	@JsonIgnoreProperties(value= {"handler", "hibernateLazyInitializer"}, allowSetters=true)
